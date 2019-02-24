@@ -63,7 +63,7 @@
     <Compile Include="Templates\Combination.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ShowEditor\ShowEditor.Data.csproj">
+    <ProjectReference Include="..\ShowEditor.Data\ShowEditor.Data.csproj">
       <Project>{0869d9c2-7692-403f-9b8d-720265cf9af3}</Project>
       <Name>ShowEditor.Data</Name>
     </ProjectReference>

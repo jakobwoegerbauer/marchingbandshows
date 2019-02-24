@@ -80,11 +80,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ShowEditor\ShowEditor.Data.csproj">
+    <ProjectReference Include="..\ShowEditor.Data\ShowEditor.Data.csproj">
       <Project>{0869d9c2-7692-403f-9b8d-720265cf9af3}</Project>
       <Name>ShowEditor.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Simulator\ShowEditor.Simulator.csproj">
+    <ProjectReference Include="..\ShowEditor.Simulator\ShowEditor.Simulator.csproj">
       <Project>{652958b4-e55f-49b7-9c40-df6786c8bdbd}</Project>
       <Name>ShowEditor.Simulator</Name>
     </ProjectReference>
