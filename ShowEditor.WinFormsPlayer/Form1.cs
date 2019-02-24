@@ -24,13 +24,11 @@ namespace ShowEditor.WinFormsPlayer
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //graphics = ActiveForm.CreateGraphics();
-
             var trans = new BasicTransformations(1);
 
             var formation = new RowsFormation(5, 5);
             Show show = new Show(Combination.Concatenate("Show",
-                //trans.MoveForward("v", formation, 8),
+                trans.MoveForward("v", formation, 8),
                 trans.Schwenkung("Schwenkung", formation, toRight: false),
                 trans.Schwenkung("Schwenkung", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
@@ -44,24 +42,6 @@ namespace ShowEditor.WinFormsPlayer
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 3", formation, toRight: true)
                 ));
-
-            /*show = new Show(new Element
-            {
-                SubElements = new SubElement[]
-                {
-                    new SubElement
-                    {
-                        StartTime = 1,
-                        Transformation = trans.Schwenkung("",formation, toRight: false),
-                    },
-                    new SubElement
-                    {
-                        StartTime = 9,
-                        Transformation = trans.Schwenkung("",formation, toRight: true),
-                    }
-                },
-                StartFormation = formation
-            });*/
 
             Show rotTest = new Show(Combination.Concatenate("show",
                 new Element
@@ -99,13 +79,13 @@ namespace ShowEditor.WinFormsPlayer
             ));
             var x = show.ToJSON();
 
-            var generators = new Dictionary<string, Func<FormationData, Formation>>
+            var formationTypes =new List<Formation>
             {
-                { new BasicFormation().FormationTypeIdentifier, new BasicFormation().FromData },
-                { new RowsFormation().FormationTypeIdentifier, new RowsFormation().FromData }
+                new BasicFormation(),
+                new RowsFormation()
             };
 
-            Show s = ShowEditor.Data.Show.FromJSON(x, generators);
+            Show s = ShowEditor.Data.Show.FromJSON(x, formationTypes);
 
             simulator = new ShowSimulator(show);
         }
@@ -115,7 +95,6 @@ namespace ShowEditor.WinFormsPlayer
             simulator.ExecuteStep();
             lblStep.Text = "Step " + simulator.Time;
             Draw();
-            //panel.Refresh();
         }
 
         private void Draw()
@@ -155,7 +134,6 @@ namespace ShowEditor.WinFormsPlayer
 
         private void panel_Paint(object sender, PaintEventArgs e)
         {
-            //Draw();
         }
     }
 }

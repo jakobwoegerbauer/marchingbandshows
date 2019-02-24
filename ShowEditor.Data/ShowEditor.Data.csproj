@@ -47,7 +47,6 @@
     <Compile Include="BasicFormation.cs" />
     <Compile Include="FormationData.cs" />
     <Compile Include="GroupAction.cs" />
-    <Compile Include="MovementDependency.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Show.cs" />
     <Compile Include="SubElement.cs" />

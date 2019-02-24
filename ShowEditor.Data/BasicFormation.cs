@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ShowEditor.Data
 {
+    /// <summary>
+    /// Simplest Formation without any additional information and functionality
+    /// </summary>
     public class BasicFormation : Formation
     {
         public BasicFormation() : base("")

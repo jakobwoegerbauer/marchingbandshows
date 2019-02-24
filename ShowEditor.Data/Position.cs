@@ -6,10 +6,24 @@ using System.Threading.Tasks;
 
 namespace ShowEditor.Data
 {
+    /// <summary>
+    /// Position of a player
+    /// </summary>
     public class Position
     {
+        /// <summary>
+        /// X coordinate
+        /// </summary>
         public double X { get; set; }
+
+        /// <summary>
+        /// Y coordinate
+        /// </summary>
         public double Y { get; set; }
+
+        /// <summary>
+        /// The rotation in degrees. No rotation is looking in the positive x direction
+        /// </summary>
         public double Rotation { get; set; }
 
         public Position(double x, double y, double rotation)

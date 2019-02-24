@@ -6,9 +6,19 @@ using System.Threading.Tasks;
 
 namespace ShowEditor.Data
 {
+    /// <summary>
+    /// Subelement of an show element
+    /// </summary>
     public class SubElement
     {
+        /// <summary>
+        /// Starttime of the subelement. A starttime of 0 does not delay the actions in the element.
+        /// </summary>
         public int StartTime { get; set; }
+
+        /// <summary>
+        /// The element
+        /// </summary>
         public Element Element { get; set; }
 
         /// <summary>

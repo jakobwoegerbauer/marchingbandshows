@@ -8,10 +8,20 @@ using System.Threading.Tasks;
 
 namespace ShowEditor.Data
 {
+    /// <summary>
+    /// Specifies a formation
+    /// </summary>
     public class Formation
     {
+        /// <summary>
+        /// Identifier of the formation type. When parsing the formation the according formation type is used.
+        /// The default value is the empty string.
+        /// </summary>
         public string FormationTypeIdentifier { get; private set; }
 
+        /// <summary>
+        /// Formation data
+        /// </summary>
         public FormationData Data { get; set; }
 
         [JsonIgnore]

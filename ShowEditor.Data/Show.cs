@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace ShowEditor.Data
 {
+    /// <summary>
+    /// A marching band show
+    /// </summary>
     public class Show
     {
+        /// <summary>
+        /// The main element.
+        /// </summary>
         public Element Element { get; set; }
 
         public Show(Element transformation)
@@ -16,24 +22,39 @@ namespace ShowEditor.Data
             Element = transformation;
         }
 
+        /// <summary>
+        /// Converts the show to a JSON string validating against the schema 
+        /// specified in the file show.schema.json in the root directory of this solution.
+        /// </summary>
+        /// <returns></returns>
         public string ToJSON()
         {
             return JsonConvert.SerializeObject(this);
         }
 
-        public static Show FromJSON(string json, Dictionary<string, Func<FormationData, Formation>> formationGenerators)
+        /// <summary>
+        /// Creates a Show instance from a JSON string
+        /// </summary>
+        /// <param name="json">valid JSON string (show.schema.json)</param>
+        /// <param name="formationTypes">All available formation types</param>
+        /// <returns></returns>
+        public static Show FromJSON(string json, List<Formation> formationTypes)
         {
             Show s = JsonConvert.DeserializeObject<Show>(json);
-            SetFormations(s.Element, formationGenerators);
+            SetFormations(s.Element, formationTypes);
             return s;
         }
 
-        private static void SetFormations(Element t, Dictionary<string, Func<FormationData, Formation>> formationGenerators)
+        /// <summary>
+        /// Sets 
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="formationGenerators"></param>
+        private static void SetFormations(Element t, List<Formation> formationGenerators)
         {
-            if(formationGenerators.TryGetValue(t.StartFormation.FormationTypeIdentifier, out Func<FormationData, Formation> generator))
-            {
-                t.StartFormation = generator.Invoke(t.StartFormation.Data);
-            }
+            var formation = formationGenerators.Single(f => f.FormationTypeIdentifier == t.StartFormation.FormationTypeIdentifier);
+            t.StartFormation = formation.FromData(t.StartFormation.Data);
+            
             if(t.SubElements != null)
             {
                 foreach (var sub in t.SubElements)
