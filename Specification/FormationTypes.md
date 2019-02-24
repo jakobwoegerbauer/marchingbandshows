@@ -9,6 +9,7 @@ FormationTypeIdentifier: "RowsFormation"
 Represents a formation consisting of multiple rows with the same amount of positions, spreaded evenly with the specified depth and sidemargin.
 
 Parameters:
+
 | Name | Type | Description |
 |-|-|-|
 | Rows | int | Number of rows in the formation |

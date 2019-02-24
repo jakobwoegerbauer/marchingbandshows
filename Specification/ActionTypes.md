@@ -2,21 +2,27 @@ Currently the following ActionTypes are valid:
 
 # MoveForward
 Moves the player in the currently looking direction.
+
 Parameters:
+
 | Name | Type | default | Description |
 |-|-|-|-|
 | stepsize | double | 1.0 | Move distance per step |
 
 # Rotate
 Rotates the player clockwise the specified amount of degrees in <duration> steps, rotation/duration per step.
+
 Parameters:
+
 | Name | Type | default | Description |
 |-|-|-|-|
 | rotation | double | -90.0 | Clockwise rotation in degrees |
 
 # CopyMovement
 Copies the movement of another player.
+
 Parameters:
+
 | Name | Type | default | Description |
 |-|-|-|-|
 | dependant | int | 0 | The index of the position in the current formation from which the movement should be copied |
@@ -25,7 +31,9 @@ Parameters:
 
 # MoveUpTo
 Moves up to another player and then follows in the given distance.
+
 Parameters:
+
 | Name | Type | default | Description |
 |-|-|-|-|
 | dependant | int | 0 | The index of the position in the current formation to which should be moved up to |
