@@ -9,7 +9,7 @@ namespace ShowEditor.Data
     public class SubElement
     {
         public int StartTime { get; set; }
-        public Element Transformation { get; set; }
+        public Element Element { get; set; }
 
         /// <summary>
         /// Maps the position of the parent element to the subelement.

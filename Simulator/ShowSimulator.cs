@@ -23,7 +23,7 @@ namespace ShowEditor.Simulator
 
         public ShowSimulator(Show show)
         {
-            if (show.Transformation.StartFormation == null)
+            if (show.Element.StartFormation == null)
                 throw new ArgumentException("The StartFormation of the show must not be null");
 
             ActionManager = new ActionManager();
@@ -32,7 +32,7 @@ namespace ShowEditor.Simulator
 
         public void Initialize()
         {
-            executionGraph = new Graph(Show.Transformation, ActionManager);
+            executionGraph = new Graph(Show.Element, ActionManager);
         }
 
         public void ExecuteStep()
@@ -45,7 +45,7 @@ namespace ShowEditor.Simulator
 
         public Position[] GetPositions()
         {
-            return executionGraph?.GetPositions() ?? Show.Transformation.StartFormation.Positions;
+            return executionGraph?.GetPositions() ?? Show.Element.StartFormation.Positions;
         }
     }
 }

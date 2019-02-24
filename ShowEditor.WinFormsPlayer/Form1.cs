@@ -31,7 +31,7 @@ namespace ShowEditor.WinFormsPlayer
             var formation = new RowsFormation(5, 5);
             Show show = new Show(Combination.Concatenate("Show",
                 //trans.MoveForward("v", formation, 8),
-                trans.Schwenkung("Schwenkung", formation, toRight: false),
+                trans.Schwenkung("Schwenkung", formation, toRight: false)/*,
                 trans.Schwenkung("Schwenkung", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
@@ -42,7 +42,7 @@ namespace ShowEditor.WinFormsPlayer
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
-                trans.Schwenkung("Schwenkung 3", formation, toRight: true)
+                trans.Schwenkung("Schwenkung 3", formation, toRight: true)*/
                 ));
 
             /*show = new Show(new Element

@@ -9,11 +9,11 @@ namespace ShowEditor.Data
 {
     public class Show
     {
-        public Element Transformation { get; set; }
+        public Element Element { get; set; }
 
         public Show(Element transformation)
         {
-            Transformation = transformation;
+            Element = transformation;
         }
 
         public string ToJSON()
@@ -24,7 +24,7 @@ namespace ShowEditor.Data
         public static Show FromJSON(string json, Dictionary<string, Func<FormationData, Formation>> formationGenerators)
         {
             Show s = JsonConvert.DeserializeObject<Show>(json);
-            SetFormations(s.Transformation, formationGenerators);
+            SetFormations(s.Element, formationGenerators);
             return s;
         }
 
@@ -38,7 +38,7 @@ namespace ShowEditor.Data
             {
                 foreach (var sub in t.SubElements)
                 {
-                    SetFormations(sub.Transformation, formationGenerators);
+                    SetFormations(sub.Element, formationGenerators);
                 }
             }
         }

@@ -8,8 +8,6 @@ namespace ShowEditor.Data
 {
     public class FormationData
     {
-        public string FormationTypeIdentifier { get; set; }
-
         public string Name { get; set; }
 
         public Position[] Positions { get; set; }
@@ -18,7 +16,6 @@ namespace ShowEditor.Data
 
         public FormationData(string formationTypeIdentifier)
         {
-            FormationTypeIdentifier = formationTypeIdentifier; 
             Positions = new Position[0];
             Parameters = new Dictionary<string, object>();
         }

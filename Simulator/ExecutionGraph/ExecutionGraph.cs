@@ -97,11 +97,11 @@ namespace ShowEditor.Simulator.ExecutionGraph
                 foreach (var subTransformation in transformation.SubElements)
                 {
                     if (localTime < subTransformation.StartTime
-                        || localTime >= subTransformation.StartTime + subTransformation.Transformation.Duration)
+                        || localTime >= subTransformation.StartTime + subTransformation.Element.Duration)
                         continue;
 
-                    int[] mapping = new int[subTransformation.Transformation.StartFormation.Size];
-                    for (int i = 0; i < subTransformation.Transformation.StartFormation.Size; i++)
+                    int[] mapping = new int[subTransformation.Element.StartFormation.Size];
+                    for (int i = 0; i < subTransformation.Element.StartFormation.Size; i++)
                     {
                         mapping[i] = -1;
                     }
@@ -114,7 +114,7 @@ namespace ShowEditor.Simulator.ExecutionGraph
                             mapping[subMapping[i]] = i;
                         }
                     }
-                    edges.AddRange(CollectEdges(subTransformation.Transformation, mapping, localTime - subTransformation.StartTime + 1));
+                    edges.AddRange(CollectEdges(subTransformation.Element, mapping, localTime - subTransformation.StartTime + 1));
                 }
             }
             return edges;

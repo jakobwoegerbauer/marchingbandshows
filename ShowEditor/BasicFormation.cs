@@ -8,7 +8,7 @@ namespace ShowEditor.Data
 {
     public class BasicFormation : Formation
     {
-        public BasicFormation() : base("BasicFormation")
+        public BasicFormation() : base("")
         {
 
         }

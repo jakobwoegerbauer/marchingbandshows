@@ -37,7 +37,7 @@ namespace ShowEditor.Simulator.Templates
                 subs.Add(new SubElement
                 {
                     StartTime = time,
-                    Transformation = t
+                    Element = t
                 });
                 time += t.Duration;
             }
@@ -69,7 +69,7 @@ namespace ShowEditor.Simulator.Templates
                 SubElements = transformations.Select(t => new SubElement
                 {
                     StartTime = 0,
-                    Transformation = t
+                    Element = t
                 }).ToArray()
             };
         }

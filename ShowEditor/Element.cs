@@ -24,7 +24,7 @@ namespace ShowEditor.Data
                 }
                 if(SubElements != null)
                 {
-                    max = Math.Max(max, SubElements.Max(s => s.StartTime + s.Transformation.Duration));
+                    max = Math.Max(max, SubElements.Max(s => s.StartTime + s.Element.Duration));
                 }
                 return max;
             }

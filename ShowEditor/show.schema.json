@@ -1,0 +1,134 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://github.com/jakobwoegerbauer/marchingbandshows/show.schema.json",
+	"title": "Show",
+	"description": "A marching band show",
+	"type": "object",
+	"properties": {
+		"Element": {
+			"description": "Element covering the whole show",
+			"type": "object",
+			"id": "element",
+			"properties": {
+				"Name": {
+					"description": "Name of the show element",
+					"type": "string"
+				},
+				"StartFormation": {
+					"description": "Description of the starting positions",
+					"type": "object",
+					"properties": {
+						"FormationTypeIdentifier": {
+							"description": "Type of the formation",
+							"type": "string",
+							"default": ""
+						},
+						"Data": {
+							"description": "The actual formation data",
+							"type": "object",
+							"properties": {
+								"Name": {
+									"description": "Name of the formation",
+									"type": "string"
+								},
+								"Positions": {
+									"description": "Positions",
+									"type": "array",
+									"items": {
+										"description": "Position and rotation of a player",
+										"type": "object",
+										"properties": {
+											"X": {
+												"description": "X-coordinate",
+												"type": "number"
+											},
+											"Y": {
+												"description": "Y-coordinate",
+												"type": "number"
+											},
+											"Rotation": {
+												"description": "The rotation in degrees. No rotation is looking in the positive x direction",
+												"type": "number",
+												"default": 0
+											}
+										},
+										"required": ["X","Y","Rotation"]
+									}
+								}
+							}
+						}
+					}
+				},
+				"GroupActions": {
+					"description": "Actions",
+					"type": [ "array", "null" ],
+					"items": {
+						"type": "object",
+						"properties": {
+							"Delay": {
+								"description": "Delay of the action relative to the element's starttime",
+								"type": "integer",
+								"default": 0
+							},
+							"Duration": {
+								"description": "Duration of the action",
+								"type": "integer"
+							},
+							"Priority": {
+								"description": "Priority of the action. Actions with higher priority will be executed first",
+								"type": "number",
+								"default": 0
+							},
+							"Positions": {
+								"description": "Which positions (from the current element's formation) should perform this action. If null, the action will be applied to all positions",
+								"type": [ "array", "null" ],
+								"items": {
+									"type": "integer"
+								}
+							},
+							"ActionType": {
+								"description": "Name of the implemented actiontype",
+								"type": "string"
+							},
+							"Dependencies": {
+								"description": "Array of positions which should perform their action before the positions of the current action",
+								"type": [ "array", "null" ],
+								"items": {
+									"type": "integer"
+								}
+							}
+						},
+						"required": ["Duration","ActionType"]
+					}
+				},
+				"SubElements": {
+					"description": "Subelements of this element",
+					"type": [ "array", "null" ],
+					"items": {
+						"type": "object",
+						"properties": {
+							"StartTime": {
+								"description": "Starttime of the subelement relative to the starttime of the current element",
+								"type": "integer",
+								"default": 0
+							},
+							"Element": {
+								"type": "object",
+								"$ref": "element"
+							},
+							"PositionMapping": {
+								"description": "Maps the positions of the parent element's formation to the current elements formation",
+								"type": [ "array", "null" ],
+								"items": {
+									"type": "integer"
+								}
+							}
+						},
+						"required": [ "Element" ]
+					}
+				}
+			}
+		}
+	},
+	"required": [ "Element" ]
+}

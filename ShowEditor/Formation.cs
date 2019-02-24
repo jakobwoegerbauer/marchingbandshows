@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -13,8 +14,10 @@ namespace ShowEditor.Data
 
         public FormationData Data { get; set; }
 
+        [JsonIgnore]
         public Position[] Positions => Data.Positions;
 
+        [JsonIgnore]
         public int Size => Data.Positions.Length;
 
         public virtual Formation FromData(FormationData data)
