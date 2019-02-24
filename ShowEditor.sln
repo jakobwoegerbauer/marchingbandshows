@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F3BC1320-206D-4DEA-BAF1-F5D77FF3E1AF}"
-	ProjectSection(SolutionItems) = preProject
-		show.schema.json = show.schema.json
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowEditor.Data", "ShowEditor.Data\ShowEditor.Data.csproj", "{0869D9C2-7692-403F-9B8D-720265CF9AF3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowEditor.Simulator", "ShowEditor.Simulator\ShowEditor.Simulator.csproj", "{652958B4-E55F-49B7-9C40-DF6786C8BDBD}"
