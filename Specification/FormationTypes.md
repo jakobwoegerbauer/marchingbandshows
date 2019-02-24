@@ -2,10 +2,12 @@ The following FormationTypes are available:
 
 # Base Formation
 FormationTypeIdentifier: ""
+
 Has no additional information or functionality
 
 # RowsFormation
 FormationTypeIdentifier: "RowsFormation"
+
 Represents a formation consisting of multiple rows with the same amount of positions, spreaded evenly with the specified depth and sidemargin.
 
 Parameters:
@@ -19,6 +21,7 @@ Parameters:
 
 The positions are indexed in the following order: Each row is indexed from the left to the right, from the first row to the end. Position 0 is therefore the leftmost position in the firstrow. 
 Example formation with 5 rows and 3 columns looking to the right:
-| 12 | 09 | 6 | 3 | 0 |
-| 13 | 10 | 7 | 4 | 1 | -->
-| 14 | 11 | 8 | 5 | 2 |
+
+| 12 | 09 | 6 | 3 | 0 | <br/>
+| 13 | 10 | 7 | 4 | 1 | --> <br/>
+| 14 | 11 | 8 | 5 | 2 | <br/>
