@@ -15,17 +15,24 @@ namespace ShowEditor.Simulator.ActionExecutors
         private readonly PositionHistory[] players;
         private readonly int currentPlayer;
         private readonly int[] positionMapping;
+        private readonly Element element;
 
         public Dictionary<string, object> ActionParameters { get; private set; }
 
-        public ActionData(int time, int localTime, PositionHistory[] players, int[] positionMapping, int currentPlayer, Dictionary<string, object> actionParameters)
+        public ActionData(int time, int localTime, PositionHistory[] players, int[] positionMapping, int currentPlayer, Element element, Dictionary<string, object> actionParameters)
         {
             Time = time;
             LocalTime = localTime;
             this.players = players;
             this.currentPlayer = currentPlayer;
             this.positionMapping = positionMapping;
+            this.element = element;
             ActionParameters = actionParameters ?? new Dictionary<string, object>();
+        }
+
+        public Formation GetFormation()
+        {
+            return element.StartFormation;
         }
 
         public Position GetPosition(int localTimeStamp)

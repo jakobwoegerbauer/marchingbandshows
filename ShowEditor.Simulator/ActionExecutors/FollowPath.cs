@@ -8,7 +8,7 @@ using ShowEditor.Simulator.ExecutionGraph;
 
 namespace ShowEditor.Simulator.ActionExecutors
 {
-    class CopyMovement : IActionExecutor
+    class FollowPath : IActionExecutor
     {
         public Position ExecuteStep(ActionData data)
         {
@@ -26,14 +26,7 @@ namespace ShowEditor.Simulator.ActionExecutors
             if (data.LocalTime - timeDiff < minTime)
                 return data.GetCurrentPosition();
 
-            var dc = data.GetPosition(dependant, data.LocalTime - timeDiff);
-            var dlast = data.GetPosition(dependant, data.LocalTime - timeDiff - 1);
-            var pc = data.GetCurrentPosition();
-
-            return new Position(
-                pc.X + dc.X - dlast.X,
-                pc.Y + dc.Y - dlast.Y,
-                pc.Rotation + dc.Rotation - dlast.Rotation);
+            return data.GetPosition(dependant, data.LocalTime - timeDiff);
         }
     }
 }

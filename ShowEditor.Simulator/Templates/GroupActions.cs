@@ -51,7 +51,7 @@ namespace ShowEditor.Simulator.Templates
         {
             var g = new GroupAction
             {
-                ActionType = ActionManager.DefaultActions.COPY_MOVEMENT,
+                ActionType = ActionManager.DefaultActions.FOLLOW_PATH,
                 Duration = duration,
                 Delay = delay,
                 Positions = followers,

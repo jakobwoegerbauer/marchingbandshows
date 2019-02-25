@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ActionExecutors\ActionData.cs" />
     <Compile Include="ActionExecutors\ActionManager.cs" />
+    <Compile Include="ActionExecutors\FollowPath.cs" />
     <Compile Include="ActionExecutors\CopyMovement.cs" />
     <Compile Include="ActionExecutors\IActionExecutor.cs" />
     <Compile Include="ActionExecutors\MoveForward.cs" />

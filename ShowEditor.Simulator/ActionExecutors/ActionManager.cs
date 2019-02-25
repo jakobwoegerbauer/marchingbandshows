@@ -16,6 +16,7 @@ namespace ShowEditor.Simulator.ActionExecutors
             {
                 { DefaultActions.WAIT, new Wait() },
                 { DefaultActions.COPY_MOVEMENT, new CopyMovement() },
+                { DefaultActions.FOLLOW_PATH, new FollowPath() },
                 { DefaultActions.MOVE_FORWARD, new MoveForward() },
                 { DefaultActions.ROTATE, new Rotate() },
                 { DefaultActions.MOVE_UP_TO, new MoveUpTo() }
@@ -41,6 +42,7 @@ namespace ShowEditor.Simulator.ActionExecutors
             public static readonly string WAIT = "Wait";
             public static readonly string MOVE_FORWARD = "MoveForward";
             public static readonly string COPY_MOVEMENT = "CopyMovement";
+            public static readonly string FOLLOW_PATH = "FollowPath";
             public static readonly string ROTATE = "Rotate";
             public static readonly string MOVE_UP_TO = "MoveUpTo";
         }

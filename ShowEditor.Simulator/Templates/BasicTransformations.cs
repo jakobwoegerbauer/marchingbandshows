@@ -65,7 +65,7 @@ namespace ShowEditor.Simulator.Templates
                 {
                     int[] p = new int[1];
                     p[0] = row[j];
-                    groupActions.Add(GroupActions.Follow(rowBefore[j], timeFinishedTurn, duration / 2, delay: 0, followers: p));
+                    groupActions.Add(GroupActions.Follow(rowBefore[j], timeFinishedTurn-2, duration / 2, delay: 2, followers: p));
                 }
                 groupActions.Add(GroupActions.MoveUpTo(rowBefore[0], durationAll - timeFinishedTurn, row, delay: timeFinishedTurn, stepsize: StepSize, depth: formation.Depth));
                 rowBefore = row;
@@ -104,6 +104,61 @@ namespace ShowEditor.Simulator.Templates
                 Name = name,
                 StartFormation = formation,
                 GroupActions = groupActions.ToArray()
+            };
+        }
+
+        public Element GrosseWendeComplete(string name, RowsFormation formation, int timeAfterWideFormation = 2)
+        {
+            var wideFormation = BreiteFormation(name + "_1", formation);
+            var wideFormationForward = MoveForward(name + "_2", formation, wideFormation.Duration + timeAfterWideFormation);
+            var wende = GrosseWende(name + "_3", formation);
+            var slimFormation = BreiteFormation(name + "_4", formation, sideMarginFactor: 0.5);
+            var slimFormationForward = MoveForward(name + "_2", formation, slimFormation.Duration);
+
+            return new Element
+            {
+                Name = name,
+                StartFormation = formation,
+                SubElements = new SubElement[]
+                {
+                    new SubElement
+                    {
+                        Element = wideFormation
+                    },
+                    new SubElement
+                    {
+                        Element = wideFormationForward
+                    },
+                    new SubElement
+                    {
+                        StartTime = wideFormation.Duration,
+                        Element = wende
+                    },
+                    new SubElement
+                    {
+                        StartTime = wideFormationForward.Duration + wende.Duration,
+                        Element = slimFormation
+                    },
+                    new SubElement
+                    {
+                        StartTime = wideFormationForward.Duration + wende.Duration,
+                        Element = slimFormationForward
+                    }
+                }
+            };
+        }
+
+        public Element GrosseWende(string name, RowsFormation formation)
+        {
+            var actions = new List<GroupAction>();
+
+
+
+            return new Element
+            {
+                Name = name,
+                StartFormation = formation,
+                GroupActions = actions.ToArray()
             };
         }
     }

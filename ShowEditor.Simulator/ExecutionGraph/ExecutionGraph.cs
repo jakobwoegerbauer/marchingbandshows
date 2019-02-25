@@ -161,7 +161,7 @@ namespace ShowEditor.Simulator.ExecutionGraph
                 foreach (var action in individualActions[n].OrderByDescending(a => a.Priority))
                 {
                     var executor = actionManager.GetActionExecutor(action.ActionType);
-                    p = executor.ExecuteStep(new ActionData(Time, action.LocalTime, nodes, reversePositionMappings[action.Element], n, action.Parameters));
+                    p = executor.ExecuteStep(new ActionData(Time, action.LocalTime, nodes, reversePositionMappings[action.Element], n, action.Element, action.Parameters));
                     nodes[n].AddPosition(p, Time);
                 }
                 if (individualActions[n].Count == 0)
