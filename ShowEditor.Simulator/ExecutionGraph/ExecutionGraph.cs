@@ -60,7 +60,7 @@ namespace ShowEditor.Simulator.ExecutionGraph
             {
                 foreach (var action in transformation.GroupActions)
                 {
-                    if (action.Delay >= localTime || localTime > action.Delay + action.Duration)
+                    if (action.Delay > localTime || localTime >= action.Delay + action.Duration)
                         continue;
                     int[] positions = action.Positions ?? Combination.Range(0, transformation.StartFormation.Size - 1);
                     for (int i = 0; i < positions.Length; i++)
@@ -84,7 +84,7 @@ namespace ShowEditor.Simulator.ExecutionGraph
                                 ActionType = action.ActionType,
                                 Priority = action.Priority,
                                 Parameters = action.Parameters,
-                                LocalTime = localTime,
+                                LocalTime = localTime+1,
                                 Element = transformation
                             }, reversePositionMapping[positions[i]]);
                         }
@@ -114,7 +114,7 @@ namespace ShowEditor.Simulator.ExecutionGraph
                             mapping[subMapping[i]] = i;
                         }
                     }
-                    edges.AddRange(CollectEdges(subTransformation.Element, mapping, localTime - subTransformation.StartTime + 1));
+                    edges.AddRange(CollectEdges(subTransformation.Element, mapping, localTime - subTransformation.StartTime));
                 }
             }
             return edges;
@@ -135,6 +135,7 @@ namespace ShowEditor.Simulator.ExecutionGraph
         {
             if (calculated)
                 return;
+
             int[] mapping = new int[show.StartFormation.Size];
             for (int i = 0; i < mapping.Length; i++)
             {
@@ -151,8 +152,8 @@ namespace ShowEditor.Simulator.ExecutionGraph
             {
                 throw new InvalidOperationException("CalculateStep() has to be called before.");
             }
-            Time++;
             calculated = false;
+            Time++;
             for (int i = 0; i < nodeOrder.Length; i++)
             {
                 var n = nodeOrder[i];

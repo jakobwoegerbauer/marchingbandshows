@@ -55,6 +55,16 @@ namespace ShowEditor.Simulator.Templates
             return row;
         }
 
+        public int[] GetColumn(int index)
+        {
+            int[] column = new int[Rows];
+            for(int i = 0; i < Rows; i++)
+            {
+                column[i] = i * Columns + index;
+            }
+            return column;
+        }
+
         public override Formation FromData(FormationData data)
         {
             return new RowsFormation(data);

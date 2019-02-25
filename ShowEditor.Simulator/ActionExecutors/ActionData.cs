@@ -45,7 +45,7 @@ namespace ShowEditor.Simulator.ActionExecutors
 
         public Position GetCurrentPosition(int player)
         {
-            return GetPositionGlobalTime(player, Time+1);
+            return GetPositionGlobalTime(player, Time);
         }
 
         private Position GetPositionGlobalTime(int player, int globalTime)

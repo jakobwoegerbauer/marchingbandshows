@@ -8,6 +8,7 @@ Parameters:
 | Name | Type | default | Description |
 |-|-|-|-|
 | stepsize | double | 1.0 | Move distance per step |
+| direction | double | 0.0 | Direction in degrees to move relative to looking direction |
 
 # Rotate
 Rotates the player clockwise the specified amount of degrees in <duration> steps, rotation/duration per step.

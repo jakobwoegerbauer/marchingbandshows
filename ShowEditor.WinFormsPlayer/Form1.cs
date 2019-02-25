@@ -21,16 +21,20 @@ namespace ShowEditor.WinFormsPlayer
         }
 
         private ShowSimulator simulator;
+        bool first = true;
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var trans = new BasicTransformations(1);
+            var trans = new BasicElements(1);
 
             var formation = new RowsFormation(5, 5);
             Show show = new Show(Combination.Concatenate("Show",
-                trans.MoveForward("v", formation, 8),
+                Combination.Parallel("",
+                    trans.MoveForward("v", formation, 8),
+                    trans.BreiteFormation("wide", formation)),
                 trans.Schwenkung("Schwenkung", formation, toRight: false),
                 trans.Schwenkung("Schwenkung", formation, toRight: true),
+                trans.BreiteFormation("wide", formation, sideMarginFactor: 0.5),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
@@ -92,6 +96,13 @@ namespace ShowEditor.WinFormsPlayer
 
         private void btnStep_Click(object sender, EventArgs e)
         {
+            if (first)
+            {
+                lblStep.Text = "Step " + simulator.Time;
+                Draw();
+                first = false;
+                return;
+            }
             simulator.ExecuteStep();
             lblStep.Text = "Step " + simulator.Time;
             Draw();
@@ -104,8 +115,8 @@ namespace ShowEditor.WinFormsPlayer
             var graphics = panel.CreateGraphics();
             float rad = 3f;
             float scale = 10;
-            float mx = 200;
-            float my = maxY / 2+100;
+            float mx = 400;
+            float my = maxY / 2+200;
 
             using (Pen p = new Pen(Color.Black))
             {

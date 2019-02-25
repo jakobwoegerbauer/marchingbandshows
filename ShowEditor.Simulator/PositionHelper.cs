@@ -24,11 +24,11 @@ namespace ShowEditor.Simulator
             return rad * 180.0 / Math.PI;
         }
 
-        public static Position Forward(Position a, double distance)
+        public static Position Forward(Position a, double distance, double direction = 0)
         {
             Position pos = a.Copy();
-            pos.X += Math.Cos(ToRadians(pos.Rotation)) * distance;
-            pos.Y += Math.Sin(ToRadians(pos.Rotation)) * distance;
+            pos.X += Math.Cos(ToRadians(pos.Rotation + direction)) * distance;
+            pos.Y += Math.Sin(ToRadians(pos.Rotation + direction)) * distance;
             return pos;
         }
     }

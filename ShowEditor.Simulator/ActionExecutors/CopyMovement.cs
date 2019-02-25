@@ -23,8 +23,8 @@ namespace ShowEditor.Simulator.ActionExecutors
             if (data.ActionParameters.TryGetValue("dependant", out object d))
                 dependant = Convert.ToInt32(d);
 
-            var dc = data.GetPosition(dependant, Math.Max(data.LocalTime + 1 - timeDiff, minTime));
-            var dlast = data.GetPosition(dependant, Math.Max(data.LocalTime - timeDiff, minTime));
+            var dc = data.GetPosition(dependant, Math.Max(data.LocalTime - timeDiff, minTime));
+            var dlast = data.GetPosition(dependant, Math.Max(data.LocalTime - timeDiff - 1, minTime));
             var pc = data.GetCurrentPosition();
 
             return new Position(

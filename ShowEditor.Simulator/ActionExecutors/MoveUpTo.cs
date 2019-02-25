@@ -20,7 +20,7 @@ namespace ShowEditor.Simulator.ActionExecutors
             if (data.ActionParameters.TryGetValue("dependant", out object dep))
                 dependant = Convert.ToInt32(dep);
 
-            Position depPos = data.GetPosition(dependant, data.LocalTime + 1);
+            Position depPos = data.GetPosition(dependant, data.LocalTime);
             double alpha = data.GetCurrentPosition().Rotation - PositionHelper.ToDegrees(
                 Math.Atan((depPos.Y - data.GetCurrentPosition().Y) / (depPos.X - data.GetCurrentPosition().X)));
             double hyp = PositionHelper.GetDistance(data.GetCurrentPosition(), depPos);

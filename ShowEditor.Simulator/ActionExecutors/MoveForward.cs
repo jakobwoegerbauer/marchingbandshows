@@ -13,13 +13,14 @@ namespace ShowEditor.Simulator.ActionExecutors
         public Position ExecuteStep(ActionData data)
         {
             double stepsize = 1;
-            if (data.ActionParameters != null)
-            {
-                if (data.ActionParameters.TryGetValue("stepsize", out object ds))
-                    stepsize = (ds as double?) ?? stepsize;
-            }
+            double direction = 0;
 
-            return PositionHelper.Forward(data.GetCurrentPosition(), stepsize);
+            if (data.ActionParameters.TryGetValue("stepsize", out object ds))
+                stepsize = Convert.ToDouble(ds);
+            if (data.ActionParameters.TryGetValue("direction", out object dir))
+                direction = Convert.ToDouble(dir);
+
+            return PositionHelper.Forward(data.GetCurrentPosition(), stepsize, direction);
         }
     }
 }
