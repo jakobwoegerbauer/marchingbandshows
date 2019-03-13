@@ -27,8 +27,8 @@ namespace ShowEditor.WinFormsPlayer
         {
             var trans = new BasicElements(1);
 
-            var formation = new RowsFormation(5, 5);
-            Show show = new Show(Combination.Concatenate("Show",
+            var formation = new RowsFormation(12, 5);
+            /*Show show = new Show(Combination.Concatenate("Show",
                 Combination.Parallel("",
                     trans.MoveForward("v", formation, 8),
                     trans.BreiteFormation("wide", formation)),
@@ -45,7 +45,8 @@ namespace ShowEditor.WinFormsPlayer
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 3", formation, toRight: true)
-                ));
+                ));*/
+            Show show = new Show(trans.GrosseWendeComplete("Große Wende", formation));
 
             Show rotTest = new Show(Combination.Concatenate("show",
                 new Element
@@ -116,7 +117,7 @@ namespace ShowEditor.WinFormsPlayer
             float rad = 3f;
             float scale = 10;
             float mx = 400;
-            float my = maxY / 2+200;
+            float my = maxY / 2;
 
             using (Pen p = new Pen(Color.Black))
             {

@@ -45,9 +45,7 @@ namespace ShowEditor.Simulator.Templates
                 int inwardIndex = toRight ? (formation.Columns - j - 1) : j;
                 int[] p = new int[1];
                 p[0] = frontRow[inwardIndex];
-                groupActions.Add(GroupActions.MoveForward(duration, stepsize: (j + 1.0) * PositionHelper.ToRadians(Math.Abs(degree) / duration) * formation.SideMargin, positions: p));
-                groupActions.Add(GroupActions.Rotate(degree * duration / (duration + 1), duration: duration, priority: 10, positions: p));
-                groupActions.Add(GroupActions.Rotate(degree / (duration + 1), delay: duration - 1, duration: 1, priority: -10, positions: p));
+                groupActions.AddRange(Curve(duration, (j + 1) * formation.SideMargin, degree, positions: p));
             }
             groupActions.Add(GroupActions.MoveForward(durationAll - duration, delay: duration, stepsize: slowStep, positions: frontRow));
 
@@ -65,7 +63,7 @@ namespace ShowEditor.Simulator.Templates
                 {
                     int[] p = new int[1];
                     p[0] = row[j];
-                    groupActions.Add(GroupActions.Follow(rowBefore[j], timeFinishedTurn-2, duration / 2, delay: 2, followers: p));
+                    groupActions.Add(GroupActions.Follow(rowBefore[j], timeFinishedTurn - 2, duration / 2, delay: 2, followers: p));
                 }
                 groupActions.Add(GroupActions.MoveUpTo(rowBefore[0], durationAll - timeFinishedTurn, row, delay: timeFinishedTurn, stepsize: StepSize, depth: formation.Depth));
                 rowBefore = row;
@@ -83,9 +81,9 @@ namespace ShowEditor.Simulator.Templates
         {
             List<GroupAction> groupActions = new List<GroupAction>();
 
-            for(int i = 0; i < formation.Columns; i++)
+            for (int i = 0; i < formation.Columns; i++)
             {
-                double fromCenter = i - (formation.Columns-1) / 2.0;
+                double fromCenter = i - (formation.Columns - 1) / 2.0;
                 groupActions.Add(new GroupAction
                 {
                     ActionType = ActionManager.DefaultActions.MOVE_FORWARD,
@@ -95,7 +93,7 @@ namespace ShowEditor.Simulator.Templates
                     {
                         { "stepsize", formation.SideMargin*(sideMarginFactor-1) / stepsPerRow },
                         { "direction",  fromCenter >= 0 ? 90 : -90 }
-                    }                    
+                    }
                 });
             }
             formation.SideMargin *= sideMarginFactor;
@@ -131,7 +129,7 @@ namespace ShowEditor.Simulator.Templates
                     },
                     new SubElement
                     {
-                        StartTime = wideFormation.Duration,
+                        StartTime = wideFormationForward.Duration,
                         Element = wende
                     },
                     new SubElement
@@ -148,17 +146,57 @@ namespace ShowEditor.Simulator.Templates
             };
         }
 
-        public Element GrosseWende(string name, RowsFormation formation)
+        public Element GrosseWende(string name, RowsFormation formation, int rotDuration = 16, double slowStep = 0.4)
         {
             var actions = new List<GroupAction>();
+            var firstRow = formation.GetRow(0);
 
+            int endOfLastRowTurn = rotDuration + (formation.Rows - 1) * (rotDuration / 4);
+            double posFrontRowWhenLastTurnEnds = slowStep * (endOfLastRowTurn - rotDuration);
+            double posSecondToLastRowWhenLastTurnEnds = posFrontRowWhenLastTurnEnds - (formation.Rows - 2) * formation.Depth;
+            int durationAll = endOfLastRowTurn + (int)(posSecondToLastRowWhenLastTurnEnds / (StepSize - slowStep)) - 1;
 
+            int[] frontRow = formation.GetRow(0);
+            for (int j = 0; j < formation.Columns; j++)
+            {
+                int fromCenter = j - (formation.Columns - 1) / 2;
+                int[] p = new int[1];
+                p[0] = frontRow[j];
+                actions.AddRange(Curve(rotDuration, Math.Abs(0.5+2*fromCenter)*formation.SideMargin/2, fromCenter >= 0 ? 180 : -180, positions: p));
+                actions.Add(GroupActions.MoveForward(durationAll-rotDuration, rotDuration, slowStep, positions: p));
+            }
+
+            int[] rowBefore = firstRow;
+            for (int i = 1; i < formation.Rows; i++)
+            {
+                int[] row = formation.GetRow(i);
+                int timeFinishedTurn = i * (rotDuration / 4) + rotDuration;
+                for (int j = 0; j < formation.Columns; j++)
+                {
+                    int[] p = new int[1];
+                    p[0] = row[j];
+                    actions.Add(GroupActions.Follow(rowBefore[j], i*rotDuration/4+rotDuration, rotDuration / 4, followers: p));
+                }
+                actions.Add(GroupActions.MoveUpTo(rowBefore[0], durationAll - timeFinishedTurn, row, delay: timeFinishedTurn, stepsize: StepSize, depth: formation.Depth));
+                rowBefore = row;
+            }
 
             return new Element
             {
                 Name = name,
                 StartFormation = formation,
                 GroupActions = actions.ToArray()
+            };
+        }
+
+        private IEnumerable<GroupAction> Curve(int duration, double radius, double degrees, int delay = 0, double priority = 0, int[] positions = null)
+        {
+            double eps = 0.000001;
+            return new List<GroupAction>
+            {
+                GroupActions.Rotate(degrees / 2, duration: duration, delay: delay, priority: priority - eps, positions: positions),
+                GroupActions.MoveForward(duration, stepsize: radius * PositionHelper.ToRadians(Math.Abs(degrees) / duration), delay: delay, priority: priority, positions: positions),
+                GroupActions.Rotate(degrees / 2, duration: duration, delay: delay, priority: priority + eps, positions: positions)
             };
         }
     }
