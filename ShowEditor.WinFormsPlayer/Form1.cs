@@ -109,6 +109,7 @@ namespace ShowEditor.WinFormsPlayer
         {
             if (first)
             {
+                graphics = panel.CreateGraphics();
                 lblStep.Text = "Step " + simulator.Time;
                 var pos = simulator.GetPositions();
                 players = new Player[pos.Length];
@@ -118,7 +119,7 @@ namespace ShowEditor.WinFormsPlayer
                 }
                 Draw();
 
-                _root = new ElementNode(simulator.Show.Element, Combination.Range(0, players.Length-1));
+                _root = new ElementNode(simulator.Show.Element, Combination.Range(0, players.Length-1), Combination.Range(0, players.Length-1));
                 tvElements.Nodes.Add(_root);
                 tvElements.Refresh();
 
@@ -137,32 +138,22 @@ namespace ShowEditor.WinFormsPlayer
         }
 
         private void Draw()
-        {
-            int maxX = 500;
-            int maxY = 500;
-            var graphics = panel.CreateGraphics();
-            float rad = 3f;
-            float scale = 10;
-            float mx = 30;
-            float my = maxY / 2 + 400;
-
+        {          
             using (Pen p = new Pen(Color.Black))
             {
                 graphics.Clear(Color.White);
-                graphics.DrawLine(p, 0, my, maxX, my);
-                graphics.DrawLine(p, mx, 0, mx, maxY);
-
             }
             var positions = simulator.GetPositions();
             for (int i = 0; i < positions.Length; i++)
             {
                 players[i].Position = positions[i];
-                players[i].Draw(scale, mx, my, rad, graphics);
+                players[i].Draw(graphics);
             }
         }
 
         private ElementNode _root;
         private Player[] players;
+        private Graphics graphics;
 
         private void tvElements_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -208,6 +199,21 @@ namespace ShowEditor.WinFormsPlayer
                 }
             }
             dgAction.Refresh();
+            Draw();
+        }
+
+        private void panel_Click(object sender, EventArgs e)
+        {
+            List<int> selected = new List<int>();
+            foreach(var p in players)
+            {
+                var point = panel.PointToClient(Cursor.Position);
+                p.IsSelected = p.IsHovered(point.X, point.Y);
+                if (p.IsSelected)
+                    selected.Add(p.Index);
+            }
+            lvActions.Items.Clear();
+            lvActions.Items.AddRange(_root.CollectActions(selected).ToArray());
             Draw();
         }
     }

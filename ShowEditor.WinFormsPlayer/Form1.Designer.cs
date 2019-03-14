@@ -53,6 +53,7 @@
             this.panel.Size = new System.Drawing.Size(677, 755);
             this.panel.TabIndex = 0;
             this.panel.TabStop = false;
+            this.panel.Click += new System.EventHandler(this.panel_Click);
             // 
             // lblStep
             // 

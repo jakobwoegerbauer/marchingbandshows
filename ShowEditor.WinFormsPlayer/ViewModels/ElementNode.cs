@@ -29,13 +29,15 @@ namespace ShowEditor.WinFormsPlayer.ViewModels
 
         public int StartTime { get; }
         public int GlobalStartTime { get; }
+        public int[] PositionMapping { get; }
         private readonly int[] reversePositionMapping;
 
-        public ElementNode(Element element, int[] reversePositionMapping, int startTime = 0, int globalStartTime = 0)
+        public ElementNode(Element element, int[] positionMapping, int[] reversePositionMapping, int startTime = 0, int globalStartTime = 0)
         {
             Element = element;
             StartTime = startTime;
             GlobalStartTime = globalStartTime;
+            PositionMapping = positionMapping;
 
             this.reversePositionMapping = new int[reversePositionMapping.Length];
             Array.Copy(reversePositionMapping, this.reversePositionMapping, reversePositionMapping.Length);
@@ -60,7 +62,7 @@ namespace ShowEditor.WinFormsPlayer.ViewModels
                         }
                     }
 
-                    Nodes.Add(new ElementNode(s.Element, mapping, s.StartTime, GlobalStartTime + s.StartTime));
+                    Nodes.Add(new ElementNode(s.Element, s.PositionMapping,  mapping, s.StartTime, GlobalStartTime + s.StartTime));
                 }
             }
         }
@@ -89,6 +91,24 @@ namespace ShowEditor.WinFormsPlayer.ViewModels
         public int GetGlobalPositionIndex(int position)
         {
             return reversePositionMapping[position];
+        }
+
+        public IEnumerable<GroupActionItem> CollectActions(List<int> selected)
+        {
+            List<GroupActionItem> items = new List<GroupActionItem>();
+            if (Element.GroupActions != null)
+            {
+                items.AddRange(Element.GroupActions.Where(e => e.Positions == null || e.Positions.Any(p => selected.Contains(p)))
+                    .Select(a => new GroupActionItem(a, this)));
+            }
+
+            foreach (ElementNode n in Nodes)
+            {
+                if (n.PositionMapping == null || n.PositionMapping.Any(p => selected.Contains(p))){
+                    items.AddRange(n.CollectActions(selected.Select(s => n.PositionMapping != null ? n.PositionMapping[s] : s).ToList()));
+                }
+            }
+            return items;
         }
     }
 }
