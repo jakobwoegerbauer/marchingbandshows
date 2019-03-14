@@ -17,9 +17,9 @@ namespace ShowEditor.Data
         /// </summary>
         public Element Element { get; set; }
 
-        public Show(Element transformation)
+        public Show(Element element)
         {
-            Element = transformation;
+            Element = element;
         }
 
         /// <summary>

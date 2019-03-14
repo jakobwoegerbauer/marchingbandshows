@@ -1,6 +1,7 @@
 ﻿using ShowEditor.Data;
 using ShowEditor.Simulator;
 using ShowEditor.Simulator.Templates;
+using ShowEditor.WinFormsPlayer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,9 +26,19 @@ namespace ShowEditor.WinFormsPlayer
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var trans = new BasicElements(1);
-
+            var elements = new BasicElements(1);
             var formation = new RowsFormation(12, 5);
+
+            Show baseProgram = new Show(Combination.Concatenate("Pflichtprogramm",
+                elements.MoveForward("Vorwärts", formation, 24),
+                elements.Wait("Halt im klingenden Spiel", formation, 8),
+                elements.MoveForward("Vorwärts", formation, 16),
+                elements.Schwenkung("Schwenkung", formation, toRight: true),
+                elements.MoveForward("Vorwärts", formation, 8),
+                //TODO add abfallen/aufmarschieren
+                elements.GrosseWendeComplete("Große Wende", formation)));
+
+
             /*Show show = new Show(Combination.Concatenate("Show",
                 Combination.Parallel("",
                     trans.MoveForward("v", formation, 8),
@@ -46,7 +57,7 @@ namespace ShowEditor.WinFormsPlayer
                 trans.Schwenkung("Schwenkung 2", formation, toRight: true),
                 trans.Schwenkung("Schwenkung 3", formation, toRight: true)
                 ));*/
-            Show show = new Show(trans.GrosseWendeComplete("Große Wende", formation));
+            Show show = new Show(elements.GrosseWendeComplete("Große Wende", formation));
 
             Show rotTest = new Show(Combination.Concatenate("show",
                 new Element
@@ -64,7 +75,7 @@ namespace ShowEditor.WinFormsPlayer
                         GroupActions.MoveForward(4, delay: 18),
                         GroupActions.Rotate(90, delay: 22, duration: 2),
                     }
-                }, 
+                },
                 new Element
                 {
                     Name = "sfd",
@@ -82,17 +93,16 @@ namespace ShowEditor.WinFormsPlayer
                     }
                 }
             ));
-            var x = show.ToJSON();
+            var x = baseProgram.ToJSON();
 
-            var formationTypes =new List<Formation>
+            var formationTypes = new List<Formation>
             {
                 new BasicFormation(),
                 new RowsFormation()
             };
 
-            Show s = ShowEditor.Data.Show.FromJSON(x, formationTypes);
-
-            simulator = new ShowSimulator(show);
+            Show s = Data.Show.FromJSON(x, formationTypes);
+            simulator = new ShowSimulator(s);
         }
 
         private void btnStep_Click(object sender, EventArgs e)
@@ -100,12 +110,29 @@ namespace ShowEditor.WinFormsPlayer
             if (first)
             {
                 lblStep.Text = "Step " + simulator.Time;
+                var pos = simulator.GetPositions();
+                players = new Player[pos.Length];
+                for (int i = 0; i < players.Length; i++)
+                {
+                    players[i] = new Player(i, pos[i]);
+                }
                 Draw();
+
+                _root = new ElementNode(simulator.Show.Element, Combination.Range(0, players.Length-1));
+                tvElements.Nodes.Add(_root);
+                tvElements.Refresh();
+
                 first = false;
                 return;
             }
             simulator.ExecuteStep();
             lblStep.Text = "Step " + simulator.Time;
+            _root.UpdateVisibility(simulator.Time);
+            tvElements.Refresh();
+            foreach (GroupActionItem actionItem in lvActions.Items)
+            {
+                actionItem.UpdateVisibility(simulator.Time);
+            }
             Draw();
         }
 
@@ -116,8 +143,8 @@ namespace ShowEditor.WinFormsPlayer
             var graphics = panel.CreateGraphics();
             float rad = 3f;
             float scale = 10;
-            float mx = 400;
-            float my = maxY / 2;
+            float mx = 30;
+            float my = maxY / 2 + 400;
 
             using (Pen p = new Pen(Color.Black))
             {
@@ -125,27 +152,63 @@ namespace ShowEditor.WinFormsPlayer
                 graphics.DrawLine(p, 0, my, maxX, my);
                 graphics.DrawLine(p, mx, 0, mx, maxY);
 
-                var positions = simulator.GetPositions();
-                for (int i = 0; i < positions.Length; i++)
-                {
-                    float cx = scale * (float)positions[i].X + mx;
-                    float cy = scale * (float)positions[i].Y + my;
-                    graphics.DrawEllipse(p, cx - rad, cy - rad, 2 * rad, 2 * rad);
+            }
+            var positions = simulator.GetPositions();
+            for (int i = 0; i < positions.Length; i++)
+            {
+                players[i].Position = positions[i];
+                players[i].Draw(scale, mx, my, rad, graphics);
+            }
+        }
 
-                    float fx = (float)Math.Round(Math.Cos(PositionHelper.ToRadians(positions[i].Rotation)) * scale, 1);
-                    float fy = (float)Math.Round(Math.Sin(PositionHelper.ToRadians(positions[i].Rotation)) * scale, 1);
-                    graphics.DrawLine(p, cx, cy, cx + fx, cy + fy);
+        private ElementNode _root;
+        private Player[] players;
+
+        private void tvElements_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            OnElementSelected(e.Node as ElementNode);
+        }
+
+        private void lvActions_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            OnActionSelected(e.IsSelected ? e.Item as GroupActionItem : null);
+        }
+
+        private void OnElementSelected(ElementNode e)
+        {
+            lvActions.Items.Clear();
+            if (e?.Element.GroupActions != null)
+            {
+                foreach (var action in e.Element.GroupActions.OrderBy(a => a.Delay))
+                {
+                    lvActions.Items.Add(new GroupActionItem(action, e));
                 }
             }
         }
 
-        private void panel_Click(object sender, EventArgs e)
+        private void OnActionSelected(GroupActionItem item)
         {
+            dgAction.Rows.Clear();
+            if (item != null)
+            {
+                item.ShowParameters(dgAction);
+                foreach(var p in players)
+                {
+                    p.IsSelected = false;
+                }
 
-        }
-
-        private void panel_Paint(object sender, PaintEventArgs e)
-        {
+                var pos = item.Action.Positions;
+                if(pos == null)
+                {
+                    pos = Combination.Range(0, item.ElementNode.Element.StartFormation.Size - 1);
+                }
+                foreach(var p in pos)
+                {
+                    players[item.GetGlobalPositionIndex(p)].IsSelected = true;
+                }
+            }
+            dgAction.Refresh();
+            Draw();
         }
     }
 }

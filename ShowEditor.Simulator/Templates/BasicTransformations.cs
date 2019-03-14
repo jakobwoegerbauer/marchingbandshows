@@ -77,6 +77,23 @@ namespace ShowEditor.Simulator.Templates
             };
         }
 
+        public Element Wait(string name, Formation formation, int duration)
+        {
+            return new Element
+            {
+                Name = name,
+                StartFormation = formation,
+                GroupActions = new GroupAction[]
+                {
+                    new GroupAction
+                    {
+                        ActionType = ActionManager.DefaultActions.WAIT,
+                        Duration = duration
+                    }
+                }
+            };
+        }
+
         public Element BreiteFormation(string name, RowsFormation formation, int stepsPerRow = 2, double sideMarginFactor = 2)
         {
             List<GroupAction> groupActions = new List<GroupAction>();
