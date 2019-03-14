@@ -12,15 +12,21 @@ namespace ShowEditor.Simulator.ActionExecutors
     {
         public Position ExecuteStep(ActionData data)
         {
-            double stepsize = 1;
-            double direction = 0;
-
-            if (data.ActionParameters.TryGetValue("stepsize", out object ds))
-                stepsize = Convert.ToDouble(ds);
-            if (data.ActionParameters.TryGetValue("direction", out object dir))
-                direction = Convert.ToDouble(dir);
+            var p = GetDefaultParameters();
+            ActionManager.MergeParameters(p, data.ActionParameters);
+            double stepsize = Convert.ToDouble(p["stepsize"]);
+            double direction = Convert.ToDouble(p["direction"]);
 
             return PositionHelper.Forward(data.GetCurrentPosition(), stepsize, direction);
+        }
+
+        public Dictionary<string, object> GetDefaultParameters()
+        {
+            return new Dictionary<string, object>
+            {
+                { "stepsize", 1 },
+                { "direction", 0 }
+            };
         }
     }
 }

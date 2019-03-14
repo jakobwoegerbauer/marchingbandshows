@@ -9,10 +9,10 @@ namespace ShowEditor.Simulator.Templates
 {
     public class RowsFormation : Formation
     {
-        public int Rows { get { return (int)Data.Parameters["rows"]; } set { Data.Parameters["rows"] = value; } }
-        public int Columns { get { return (int)Data.Parameters["columns"]; } set { Data.Parameters["columns"] = value; } }
-        public double Depth { get { return (double)Data.Parameters["depth"]; } set { Data.Parameters["depth"] = value; } }
-        public double SideMargin { get { return (double)Data.Parameters["sidemargin"]; } set { Data.Parameters["sidemargin"] = value; } }
+        public int Rows { get { return Convert.ToInt32(Data.Parameters["rows"]); } set { Data.Parameters["rows"] = value; } }
+        public int Columns { get { return Convert.ToInt32(Data.Parameters["columns"]); } set { Data.Parameters["columns"] = value; } }
+        public double Depth { get { return Convert.ToDouble(Data.Parameters["depth"]); } set { Data.Parameters["depth"] = value; } }
+        public double SideMargin { get { return Convert.ToDouble(Data.Parameters["sidemargin"]); } set { Data.Parameters["sidemargin"] = value; } }
 
         public RowsFormation() : base("RowsFormation")
         {
@@ -43,6 +43,13 @@ namespace ShowEditor.Simulator.Templates
                     Data.Positions[row * columns + col] = new Position(col * SideMargin, -(rows - row) * Depth, -90);
                 }
             }
+        }
+
+        public int GetRelativePosition(int index, int relDepRow, int relDepCol)
+        {
+            int curRow = index / Columns;
+            int curCol = index % Columns;
+            return (curRow + relDepRow) * Columns + curCol + relDepCol;
         }
 
         public int[] GetRow(int index)

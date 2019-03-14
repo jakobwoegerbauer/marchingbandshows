@@ -12,8 +12,9 @@ namespace ShowEditor.Simulator.ActionExecutors
     {
         public int Time { get; private set; }
         public int LocalTime { get; private set; }
+        public int CurrentPlayer { get; }
+
         private readonly PositionHistory[] players;
-        private readonly int currentPlayer;
         private readonly int[] positionMapping;
         private readonly Element element;
 
@@ -24,7 +25,7 @@ namespace ShowEditor.Simulator.ActionExecutors
             Time = time;
             LocalTime = localTime;
             this.players = players;
-            this.currentPlayer = currentPlayer;
+            CurrentPlayer = currentPlayer;
             this.positionMapping = positionMapping;
             this.element = element;
             ActionParameters = actionParameters ?? new Dictionary<string, object>();
@@ -37,7 +38,7 @@ namespace ShowEditor.Simulator.ActionExecutors
 
         public Position GetPosition(int localTimeStamp)
         {
-            return GetPosition(currentPlayer, localTimeStamp);
+            return GetPosition(CurrentPlayer, localTimeStamp);
         }
 
         public Position GetPosition(int player, int localTimeStamp)
@@ -47,7 +48,7 @@ namespace ShowEditor.Simulator.ActionExecutors
 
         public Position GetCurrentPosition()
         {
-            return GetCurrentPosition(currentPlayer);
+            return GetCurrentPosition(CurrentPlayer);
         }
 
         public Position GetCurrentPosition(int player)

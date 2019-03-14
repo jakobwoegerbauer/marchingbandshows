@@ -66,6 +66,26 @@ namespace ShowEditor.Simulator.Templates
             return g;
         }
 
+        public static GroupAction FollowDirectFront(int row, RowsFormation formation, int duration, int timeDiff, int delay = 0, int[] followers = null)
+        {
+            var g = new GroupAction
+            {
+                ActionType = ActionManager.DefaultActions.FOLLOW_PATH,
+                Duration = duration,
+                Delay = delay,
+                Positions = followers,
+                Parameters = new Dictionary<string, object>
+                {
+                    { "timeDiff", timeDiff },
+                    { "dependantRelativeRow", -1 },
+                    { "dependantRelativeColumn", 0}
+                }
+            };
+            if (timeDiff == 0)
+                g.Dependencies = formation.GetRow(row - 1);
+            return g;
+        }
+
         public static GroupAction MoveUpTo(int position, int duration, int[] followers, int delay = 0, double stepsize = 1, double depth = 1)
         {
             return new GroupAction

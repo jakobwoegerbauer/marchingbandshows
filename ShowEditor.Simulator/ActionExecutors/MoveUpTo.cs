@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ShowEditor.Data;
 using ShowEditor.Simulator.ExecutionGraph;
+using ShowEditor.Simulator.Templates;
 
 namespace ShowEditor.Simulator.ActionExecutors
 {
@@ -9,16 +10,17 @@ namespace ShowEditor.Simulator.ActionExecutors
     {
         public Position ExecuteStep(ActionData data)
         {
-            double depth = 1;
-            double stepsize = 1;
-            int dependant = 0;
+            var p = GetDefaultParameters();
+            ActionManager.MergeParameters(p, data.ActionParameters);
 
-            if (data.ActionParameters.TryGetValue("depth", out object d))
-                depth = Convert.ToDouble(d);
-            if (data.ActionParameters.TryGetValue("stepsize", out object s))
-                stepsize = Convert.ToDouble(s);
-            if (data.ActionParameters.TryGetValue("dependant", out object dep))
-                dependant = Convert.ToInt32(dep);
+            double depth = Convert.ToDouble(p["depth"]);
+            double stepsize = Convert.ToDouble(p["stepsize"]);
+            int relDepRow = Convert.ToInt32(p["dependantRelativeRow"]);
+            int relDepCol = Convert.ToInt32(p["depandantRelativeColumn"]);
+            int dependant = Convert.ToInt32(p["dependant"]);
+
+            if (relDepRow != 0 || relDepCol != 0)
+                dependant = (data.GetFormation() as RowsFormation).GetRelativePosition(data.CurrentPlayer, relDepRow, relDepCol);
 
             Position depPos = data.GetPosition(dependant, data.LocalTime);
             double alpha = data.GetCurrentPosition().Rotation - PositionHelper.ToDegrees(
@@ -31,6 +33,18 @@ namespace ShowEditor.Simulator.ActionExecutors
                 return PositionHelper.Forward(data.GetCurrentPosition(), x);
             }
             return PositionHelper.Forward(data.GetCurrentPosition(), stepsize);
+        }
+
+        public Dictionary<string, object> GetDefaultParameters()
+        {
+            return new Dictionary<string, object>
+            {
+                { "depth", 1 },
+                { "stepsize", 1 },
+                { "dependantRelativeRow", 0 },
+                { "depandantRelativeColumn", 0 },
+                { "dependant", 0 }
+            };
         }
     }
 }

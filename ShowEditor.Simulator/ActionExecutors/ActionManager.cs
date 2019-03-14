@@ -37,6 +37,14 @@ namespace ShowEditor.Simulator.ActionExecutors
             actionExecutors.Add(actionType, actionExecutor);
         }
 
+        public static void MergeParameters(Dictionary<string, object> parameters, Dictionary<string, object> overrideParams)
+        {
+            foreach(var kv in overrideParams)
+            {
+                parameters[kv.Key] = kv.Value;
+            }
+        }
+
         public static class DefaultActions
         {
             public static readonly string WAIT = "Wait";

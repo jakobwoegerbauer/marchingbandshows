@@ -23,10 +23,10 @@ namespace ShowEditor.WinFormsPlayer.ViewModels
 
         public void ShowParameters(DataGridView dgv)
         {
+            CreateRow("ActionType", Action.ActionType, dgv, true);
             CreateRow("Delay", Action.Delay, dgv, true);
-            CreateRow("Duration", Action.Delay, dgv, true);
-            CreateRow("Priority", Action.Delay, dgv, true);
-            CreateRow("ActionType", Action.Delay, dgv, true);
+            CreateRow("Duration", Action.Duration, dgv, true);
+            CreateRow("Priority", Action.Priority, dgv, true);
             if(Action.Parameters != null)
             {
                 foreach (var kv in Action.Parameters)

@@ -59,12 +59,7 @@ namespace ShowEditor.Simulator.Templates
             {
                 int[] row = formation.GetRow(i);
                 int timeFinishedTurn = (i + 1) * (duration / 2) + duration / 2;
-                for (int j = 0; j < formation.Columns; j++)
-                {
-                    int[] p = new int[1];
-                    p[0] = row[j];
-                    groupActions.Add(GroupActions.Follow(rowBefore[j], timeFinishedTurn - 2, duration / 2, delay: 2, followers: p));
-                }
+                groupActions.Add(GroupActions.FollowDirectFront(i, formation, timeFinishedTurn - 2, duration / 2, delay: 2, followers: row));
                 groupActions.Add(GroupActions.MoveUpTo(rowBefore[0], durationAll - timeFinishedTurn, row, delay: timeFinishedTurn, stepsize: StepSize, depth: formation.Depth));
                 rowBefore = row;
             }
@@ -180,20 +175,15 @@ namespace ShowEditor.Simulator.Templates
                 int[] p = new int[1];
                 p[0] = frontRow[j];
                 actions.AddRange(Curve(rotDuration, Math.Abs(0.5+2*fromCenter)*formation.SideMargin/2, fromCenter >= 0 ? 180 : -180, positions: p));
-                actions.Add(GroupActions.MoveForward(durationAll-rotDuration, rotDuration, slowStep, positions: p));
             }
+            actions.Add(GroupActions.MoveForward(durationAll - rotDuration, rotDuration, slowStep, positions: frontRow));
 
             int[] rowBefore = firstRow;
             for (int i = 1; i < formation.Rows; i++)
             {
                 int[] row = formation.GetRow(i);
                 int timeFinishedTurn = i * (rotDuration / 4) + rotDuration;
-                for (int j = 0; j < formation.Columns; j++)
-                {
-                    int[] p = new int[1];
-                    p[0] = row[j];
-                    actions.Add(GroupActions.Follow(rowBefore[j], i*rotDuration/4+rotDuration, rotDuration / 4, followers: p));
-                }
+                actions.Add(GroupActions.FollowDirectFront(i, formation, i * rotDuration / 4 + rotDuration, rotDuration / 4, followers: row));
                 actions.Add(GroupActions.MoveUpTo(rowBefore[0], durationAll - timeFinishedTurn, row, delay: timeFinishedTurn, stepsize: StepSize, depth: formation.Depth));
                 rowBefore = row;
             }

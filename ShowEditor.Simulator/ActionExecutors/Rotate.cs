@@ -12,15 +12,21 @@ namespace ShowEditor.Simulator.ActionExecutors
     {
         public Position ExecuteStep(ActionData data)
         {
-            double rotation = -90;
-            if (data.ActionParameters != null)
-            {
-                if (data.ActionParameters.TryGetValue("rotation", out object ds))
-                    rotation = (ds as double?) ?? rotation;
-            }
+            var p = GetDefaultParameters();
+            ActionManager.MergeParameters(p, data.ActionParameters);
+            double rotation = Convert.ToDouble(p["rotation"]);
+
             var pos = data.GetCurrentPosition();
             pos.Rotation -= rotation;
             return pos;
+        }
+
+        public Dictionary<string, object> GetDefaultParameters()
+        {
+            return new Dictionary<string, object>
+            {
+                { "rotation", -90 },
+            };
         }
     }
 }

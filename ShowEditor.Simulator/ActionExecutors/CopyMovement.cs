@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShowEditor.Data;
 using ShowEditor.Simulator.ExecutionGraph;
+using ShowEditor.Simulator.Templates;
 
 namespace ShowEditor.Simulator.ActionExecutors
 {
@@ -12,16 +13,17 @@ namespace ShowEditor.Simulator.ActionExecutors
     {
         public Position ExecuteStep(ActionData data)
         {
-            int timeDiff = 0;
-            int minTime = 0;
-            int dependant = 0;
+            var p = GetDefaultParameters();
+            ActionManager.MergeParameters(p, data.ActionParameters);
 
-            if (data.ActionParameters.TryGetValue("timeDiff", out object td))
-                timeDiff = Convert.ToInt32(td);
-            if (data.ActionParameters.TryGetValue("minTime", out object mt))
-                minTime = Convert.ToInt32(mt);
-            if (data.ActionParameters.TryGetValue("dependant", out object d))
-                dependant = Convert.ToInt32(d);
+            int timeDiff = Convert.ToInt32(p["timeDiff"]);
+            int minTime = Convert.ToInt32(p["minTime"]);
+            int relDepRow = Convert.ToInt32(p["dependantRelativeRow"]);
+            int relDepCol = Convert.ToInt32(p["depandantRelativeColumn"]);
+            int dependant = Convert.ToInt32(p["dependant"]);
+
+            if (relDepRow != 0 || relDepCol != 0)
+                dependant = (data.GetFormation() as RowsFormation).GetRelativePosition(data.CurrentPlayer, relDepRow, relDepCol);
 
             if (data.LocalTime - timeDiff < minTime)
                 return data.GetCurrentPosition();
@@ -34,6 +36,18 @@ namespace ShowEditor.Simulator.ActionExecutors
                 pc.X + dc.X - dlast.X,
                 pc.Y + dc.Y - dlast.Y,
                 pc.Rotation + dc.Rotation - dlast.Rotation);
+        }
+
+        public Dictionary<string, object> GetDefaultParameters()
+        {
+            return new Dictionary<string, object>
+            {
+                { "timeDiff", 0 },
+                { "minTime", 0 },
+                { "dependantRelativeRow", 0 },
+                { "depandantRelativeColumn", 0 },
+                { "dependant", 0 }
+            };
         }
     }
 }

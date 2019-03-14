@@ -10,5 +10,7 @@ namespace ShowEditor.Simulator.ActionExecutors
         /// Executes a simulation step action.
         /// </summary>
         Position ExecuteStep(ActionData actionData);
+
+        Dictionary<string, object> GetDefaultParameters();
     }
 }

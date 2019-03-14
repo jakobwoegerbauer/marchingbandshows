@@ -10,5 +10,10 @@ namespace ShowEditor.Simulator.ActionExecutors
         {
             return data.GetCurrentPosition();
         }
+
+        public Dictionary<string, object> GetDefaultParameters()
+        {
+            return new Dictionary<string, object>();
+        }
     }
 }
