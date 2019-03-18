@@ -228,5 +228,10 @@ namespace ShowEditor.WinFormsPlayer
             }
             Draw();
         }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            GoToStep(simulator.Time - 1);
+        }
     }
 }

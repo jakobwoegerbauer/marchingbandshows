@@ -37,6 +37,7 @@
             this.dgAction = new System.Windows.Forms.DataGridView();
             this.Parameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnPrev = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.panel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAction)).BeginInit();
@@ -132,11 +133,24 @@
             this.Value.Name = "Value";
             this.Value.Width = 55;
             // 
+            // btnPrev
+            // 
+            this.btnPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnPrev.Location = new System.Drawing.Point(812, 773);
+            this.btnPrev.Margin = new System.Windows.Forms.Padding(2);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Size = new System.Drawing.Size(75, 21);
+            this.btnPrev.TabIndex = 7;
+            this.btnPrev.Text = "Prev Step";
+            this.btnPrev.UseVisualStyleBackColor = true;
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1347, 801);
+            this.Controls.Add(this.btnPrev);
             this.Controls.Add(this.dgAction);
             this.Controls.Add(this.lvActions);
             this.Controls.Add(this.dataGridView1);
@@ -167,6 +181,7 @@
         private System.Windows.Forms.DataGridView dgAction;
         private System.Windows.Forms.DataGridViewTextBoxColumn Parameter;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.Button btnPrev;
     }
 }
 
