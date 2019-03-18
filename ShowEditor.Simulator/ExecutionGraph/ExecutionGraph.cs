@@ -36,6 +36,18 @@ namespace ShowEditor.Simulator.ExecutionGraph
             }
         }
 
+        public void GoToStep(int time)
+        {
+            if(Time > time)
+            {
+                Time = time;
+            }
+            while(Time < time)
+            {
+                Step();
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

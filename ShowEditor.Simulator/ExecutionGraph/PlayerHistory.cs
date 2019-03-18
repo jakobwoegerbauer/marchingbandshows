@@ -19,8 +19,8 @@ namespace ShowEditor.Simulator.ExecutionGraph
 
         internal void AddPosition(Position position, int time)
         {
-            if(time < positionHistory.Count-1)
-                throw new ArgumentException($"Can't add position for time {time}. Last item is already from {positionHistory.Count-1}");
+            if (time < positionHistory.Count - 1)
+                positionHistory.RemoveRange(time, positionHistory.Count - time);
 
             while (positionHistory.Count <= time)
             {

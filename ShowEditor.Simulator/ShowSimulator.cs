@@ -47,5 +47,10 @@ namespace ShowEditor.Simulator
         {
             return executionGraph?.GetPositions() ?? Show.Element.StartFormation.Positions;
         }
+
+        public void GoToStep(int time)
+        {
+            executionGraph.GoToStep(time);
+        }
     }
 }

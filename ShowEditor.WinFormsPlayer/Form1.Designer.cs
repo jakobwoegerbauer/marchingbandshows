@@ -84,6 +84,7 @@
             this.tvElements.Size = new System.Drawing.Size(311, 370);
             this.tvElements.TabIndex = 3;
             this.tvElements.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvElements_AfterSelect);
+            this.tvElements.DoubleClick += new System.EventHandler(this.tvElements_DoubleClick);
             // 
             // dataGridView1
             // 

@@ -109,6 +109,7 @@ namespace ShowEditor.WinFormsPlayer
         {
             if (first)
             {
+                simulator.Initialize();
                 graphics = panel.CreateGraphics();
                 lblStep.Text = "Step " + simulator.Time;
                 var pos = simulator.GetPositions();
@@ -126,15 +127,7 @@ namespace ShowEditor.WinFormsPlayer
                 first = false;
                 return;
             }
-            simulator.ExecuteStep();
-            lblStep.Text = "Step " + simulator.Time;
-            _root.UpdateVisibility(simulator.Time);
-            tvElements.Refresh();
-            foreach (GroupActionItem actionItem in lvActions.Items)
-            {
-                actionItem.UpdateVisibility(simulator.Time);
-            }
-            Draw();
+            GoToStep(simulator.Time + 1);
         }
 
         private void Draw()
@@ -214,6 +207,25 @@ namespace ShowEditor.WinFormsPlayer
             }
             lvActions.Items.Clear();
             lvActions.Items.AddRange(_root.CollectActions(selected).ToArray());
+            Draw();
+        }
+
+        private void tvElements_DoubleClick(object sender, EventArgs e)
+        {
+            if (tvElements.SelectedNode != null)
+                GoToStep((tvElements.SelectedNode as ElementNode).GlobalStartTime);
+        }
+
+        public void GoToStep(int time)
+        {
+            simulator.GoToStep(time);
+            lblStep.Text = "Step " + simulator.Time;
+            _root.UpdateVisibility(simulator.Time);
+            tvElements.Refresh();
+            foreach (GroupActionItem actionItem in lvActions.Items)
+            {
+                actionItem.UpdateVisibility(simulator.Time);
+            }
             Draw();
         }
     }
